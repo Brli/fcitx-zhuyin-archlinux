@@ -21,3 +21,4 @@ PKGBUILD files for Arch Linux user to test around, currently broken.
     
 - **FIXME** currently crash when input, display no bopomofo...
 
+- see [crash.log](https://github.com/Brli/fcitx-zhuyin/blob/master/crash.log) for detail
