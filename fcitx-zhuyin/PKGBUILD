@@ -1,0 +1,31 @@
+# Maintainer: BrLi <brli at chakralinux.org>
+
+pkgname=fcitx-zhuyin
+pkgver=0.3.1
+pkgrel=1
+pkgdesc="Fcitx Wrapper for libzhuyin, Library to deal with bopomofo"
+arch=('x86_64')
+url="https://github.com/fcitx/fcitx-libpinyin"
+license=('GPL')
+depends=('fcitx' 'libpinyin')
+makedepends=('cmake')
+source=("git+https://github.com/BrLi/fcitx-zhuyin.git")
+sha512sums=('SKIP')
+
+prepare() {
+  mkdir build
+}
+
+build() {
+  cd build
+
+  cmake -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        ../$pkgname
+  make
+}
+
+package() {
+  cd build
+  make DESTDIR="$pkgdir" install
+}

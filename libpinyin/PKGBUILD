@@ -1,0 +1,46 @@
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Yangtse <yangtsesu@gmail.com>
+# Contributor: WU Jun <quark at lihdd dot net>
+
+pkgname=libpinyin
+pkgver=2.3.0
+_modelver=17
+pkgrel=3
+pkgdesc="Library to deal with pinyin"
+arch=('x86_64')
+url="https://github.com/libpinyin/libpinyin"
+license=('GPL')
+depends=('kyotocabinet' 'glib2')
+makedepends=('gnome-common')
+source=("git+https://github.com/brli/$pkgname"
+        "$pkgname-model$_modelver.text.tar.gz::https://downloads.sourceforge.net/libpinyin/model$_modelver.text.tar.gz"
+        "libzhuyin-model11.text.tar.gz::https://sourceforge.net/projects/libzhuyin/files/models/model11.text.tar.gz"
+        'fix-missing-libzhuyin-symbol.patch')
+noextract=("$pkgname-model$_modelver.text.tar.gz"
+           "libzhuyin-model11.text.tar.gz")
+sha512sums=('SKIP'
+            'd0bf8d476a63e33e292046754161316f00bfea71ebd06fca85b3845fe535431f01458282f505380cae018050aa6a08b14a7bc0684ba372dc79ee14391f47e8a1'
+            'b1c2fd7ac6639aad0104bc65e31bd4e71affbda8badc64c1d5315a9691a1fdf02c32429678b69c2d740460702ff51b712320b73683ea32bb89e39e195e3a91e8'
+            '65eaa774e4226725568da864b53bc7df57fbcd8254d00a0ccef5751e530922fefc1640383980b5d71594f1b2dd85622106cea9f958419c738558e7f5be4bae1d')
+
+prepare() {
+    cd $pkgname
+    patch -Np1 -i ../fix-missing-libzhuyin-symbol.patch
+
+    ln -s "$srcdir"/$pkgname-model$_modelver.text.tar.gz data_pinyin/model$_modelver.text.tar.gz
+    sed -i "/wget.*model$_modelver\.text\.tar\.gz/ d" data_pinyin/Makefile.am
+
+    ln -s "$srcdir"/libzhuyin-model11.text.tar.gz data_zhuyin/model11.text.tar.gz
+    sed -i "/wget.*/ d" data_zhuyin/Makefile.am
+}
+
+build() {
+    cd $pkgname
+    ./autogen.sh --prefix=/usr --with-dbm=KyotoCabinet --enable-libzhuyin
+    make
+}
+
+package() {
+    cd $pkgname
+    make DESTDIR="$pkgdir" install
+}

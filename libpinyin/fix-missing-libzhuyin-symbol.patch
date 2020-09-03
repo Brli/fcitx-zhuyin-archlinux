@@ -1,0 +1,34 @@
+From 2d445cd5b92d3d7f78f3adaa0964de73f4279e54 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E7=9B=A7=E7=91=9E=E5=85=83=20=28Ruei-Yuan=20Lu=29?=
+ <RueiYuan.Lu@gmail.com>
+Date: Thu, 3 Sep 2020 21:38:46 +0800
+Subject: [PATCH] Fix missing dynamic symbols in libzhuyin.so
+
+* zhuyin_get_zhuyin_key
+* zhuyin_get_zhuyin_key_rest
+---
+ src/zhuyin.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/zhuyin.h b/src/zhuyin.h
+index e627001b..22f7eee6 100644
+--- a/src/zhuyin.h
++++ b/src/zhuyin.h
+@@ -594,7 +594,7 @@ bool zhuyin_get_n_zhuyin(zhuyin_instance_t * instance,
+  *
+  */
+ bool zhuyin_get_zhuyin_key(zhuyin_instance_t * instance,
+-                           guint index,
++                           size_t index,
+                            ChewingKey ** key);
+ 
+ /**
+@@ -608,7 +608,7 @@ bool zhuyin_get_zhuyin_key(zhuyin_instance_t * instance,
+  *
+  */
+ bool zhuyin_get_zhuyin_key_rest(zhuyin_instance_t * instance,
+-                                guint index,
++                                size_t index,
+                                 ChewingKeyRest ** key_rest);
+ 
+ /**
